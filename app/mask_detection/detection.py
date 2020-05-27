@@ -90,8 +90,13 @@ def post_processing(image, height, width, y_bboxes_output, y_cls_output, draw_re
             cv2.putText(image, "%s: %.2f" % (id2class[class_id], conf), (xmin + 2, ymin - 2),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.8, color)
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            print(image.tobytes())
-        output_info.append([id2class[class_id], image.tobytes()])
+
+            image = Image.fromarray(image)
+            buffered = BytesIO()
+            image.save(buffered, format="JPEG")
+            image = buffered.getvalue()
+            # Image.fromarray(image).show()
+        output_info.append([id2class[class_id], image])
 
     return output_info
 
@@ -117,8 +122,8 @@ def readStream():
 def addToStream(output):
 
     try:
-        con.execute_command('xadd', 'results', 'MAXLEN', '~', str(MAX_IMAGES), '*', 'class', output[0], 'img',
-                              'data:image/jpeg;base64,' + base64.b64encode(output[1]).decode('utf8'))
+        im = 'data:image/jpeg;base64,' + base64.b64encode(output[1]).decode('utf8')
+        con.execute_command('xadd', 'results', 'MAXLEN', '~', str(MAX_IMAGES), '*', 'class', output[0], 'img', im)
         print("OK")
     except:
         print("Not added")
