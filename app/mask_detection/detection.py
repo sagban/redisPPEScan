@@ -111,7 +111,10 @@ def readStream():
     y_bboxes_output = con.tensorget('out1')
     y_cls_output = con.tensorget('out2')
     output = post_processing(image, height, width, y_bboxes_output, y_cls_output)
-    addToStream(output[0])
+    try:
+        addToStream(output[0])
+    except:
+        print("No prediction")
     # print(results)
 
     # print(bbox_max_score_classes)

@@ -1,8 +1,10 @@
-const http = require("http"),
-bodyParser = require('body-parser'),
-express = require('express'),
-WebSocket = require('ws'),
-redis = require('redis'),
+const http = require("http");
+const bodyParser = require('body-parser');
+const express = require('express');
+const WebSocket = require('ws');
+const redis = require('redis');
+const path = require('path');
+const engines = require('consolidate');
 redisPort = process.env.REDIS_PORT || 6379,
 redisHost = process.env.REDIS_HOST || 'localhost',
 reidsPassword = process.env.REDIS_PASSWORD,
@@ -12,12 +14,16 @@ app = express(),
 server = http.createServer(app),
 port = process.env.PORT || 3000,
 streamName = process.env.STREAM || 'camera:0';
-
+// var engines = require('consolidate');
 app.use(bodyParser.json());
-app.use(express.static('public'));
+// app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', path.join(__dirname, 'views'));
+const hbs = require('hbs');
+app.set('view engine','hbs');
 
 app.get('/', function(req, res){
-   res.render('./public/index.html');
+   res.render('scan.hbs');
 });
 
 app.post('/image', function (req, res) {
@@ -38,7 +44,7 @@ var readStream = function(){
 		}
 		// var image = stream[0][1][0][1][1];
         var image = stream[0][1][0][1][3];
-		console.log(image);
+		// console.log(image);
 		wss.clients.forEach(function each(client) {
         		if (client.readyState === WebSocket.OPEN) {
         			client.send(image);
