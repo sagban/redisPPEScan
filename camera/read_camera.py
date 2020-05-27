@@ -74,7 +74,7 @@ if __name__ == '__main__':
                 'count': count,
                 'image': data.tobytes()
             }
-            _id = conn.execute_command('xadd', args.output, 'MAXLEN', '~', str(MAX_IMAGES), '*', 'count', msg['count'], 'img', 'data:image/jpeg;base64,' + base64.b64encode(msg['image']).decode('utf8'))
+            _id = conn.execute_command('xadd', args.output, 'MAXLEN', '~', str(MAX_IMAGES), '*', 'count', msg['count'], 'img', msg['image'])
             print('count: {} id: {}'.format(count, _id))
             sys.stdout.flush()
     else:

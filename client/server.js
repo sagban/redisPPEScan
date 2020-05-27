@@ -31,7 +31,7 @@ app.post('/image', function (req, res) {
 
 
 var readStream = function(){
-	redisClient.xread('Block', 10000000, 'STREAMS', streamName, '$',  function (err, stream) {
+	redisClient.xread('Block', 10000000, 'STREAMS', 'results', '$',  function (err, stream) {
 		readStream();
 		if(err){
 			return console.error(err);
