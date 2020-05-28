@@ -1,3 +1,6 @@
 opencv-python>4.0,<4.1
 redis==3.5.2
 numpy>=1.17.1
+image==1.5.31
+redisai==1.0.1
+ml2rt

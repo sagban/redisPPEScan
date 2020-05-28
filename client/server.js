@@ -22,9 +22,14 @@ app.set('views', path.join(__dirname, 'views'));
 const hbs = require('hbs');
 app.set('view engine','hbs');
 
+
+
 app.get('/', function(req, res){
    res.render('scan.hbs');
 });
+// app.get('/', function(req, res){
+//    res.render('home.hbs');
+// });
 
 app.post('/image', function (req, res) {
 	wss.clients.forEach(function each(client) {
@@ -55,7 +60,7 @@ var readStream = function(){
 
 readStream();
 
-server.listen(port, () => console.log(`Redis Labs - app listening on port ${port}!`));
+server.listen(port, () => console.log(`Redisafe - app listening on port ${port}!`));
 
 const wss = new WebSocketServer({server: server});
 
